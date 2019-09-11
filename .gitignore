@@ -1,3 +1,7 @@
+# Datafiles
+/data/yelp_dataset/*.json
+/data/yelp_dataset/*.pdf
+
 /_build
 /cover
 /deps
