@@ -1,10 +1,14 @@
-defmodule Datascience.MonteCarlo.Simple do
+defmodule Datascience.YelpMonteCarlo.Simple do
   @review_limit 10000
   @business_limit 1000
 
   def preview(:review), do: read_review() |> Enum.take(10) |> IO.inspect
   def preview(:business), do: read_business() |> Enum.take(10) |> IO.inspect
   def preview(:business_category), do: read_business_category() |> Enum.take(10) |> IO.inspect
+
+  def generate do
+    #read_review |> Enum.reduce(%{}, acc, x)
+  end
 
   # list of {business_id, "Review text."}
   def read_review do
