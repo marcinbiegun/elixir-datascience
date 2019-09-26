@@ -1,22 +1,29 @@
 defmodule Datascience.YelpMonteCarlo.Simple do
+  alias Datascience.MonteCarlo
+
   @review_limit 10000
   @business_limit 1000
 
   def preview(:review), do: read_review() |> Enum.take(10) |> IO.inspect
   def preview(:business), do: read_business() |> Enum.take(10) |> IO.inspect
   def preview(:business_category), do: read_business_category() |> Enum.take(10) |> IO.inspect
+  def preview(:generate), do: generate(10) |> IO.inspect
 
-  def generate do
-    #read_review |> Enum.reduce(%{}, acc, x)
+  def generate(amount) do
+    data = read_review() |> Enum.reduce(%{}, fn {_business_id, review_text}, acc ->
+      MonteCarlo.add_text(acc, review_text)
+    end)
+
+    0..amount |> Enum.map(fn _ -> MonteCarlo.generate(data) end)
+  end
+
+  # TODO
+  def read_review_with_categories do
   end
 
   # list of {business_id, "Review text."}
   def read_review do
-    path = Datascience.Yelp.Reader.review(:path)
-    content = File.read!(path)
-
-    content
-    |> String.split("\n")
+    File.stream!(Datascience.Yelp.Reader.review(:path))
     |> Enum.take(@review_limit)
     |> Enum.reject(& is_nil(&1) or &1 == "")
     |> Enum.map(&Jason.decode!/1)
@@ -29,11 +36,7 @@ defmodule Datascience.YelpMonteCarlo.Simple do
 
   # %{bisuness_id => %MapSet{"cat1", cat2"}}
   def read_business_category do
-    path = Datascience.Yelp.Reader.business(:path)
-    content = File.read!(path)
-
-    content
-    |> String.split("\n")
+    File.stream!(Datascience.Yelp.Reader.business(:path))
     |> Enum.take(@business_limit)
     |> Enum.reject(& is_nil(&1) or &1 == "")
     |> Enum.map(&Jason.decode!/1)
@@ -55,11 +58,7 @@ defmodule Datascience.YelpMonteCarlo.Simple do
 
   # list of {business_id, ["category1", "category2"]}
   def read_business do
-    path = Datascience.Yelp.Reader.business(:path)
-    content = File.read!(path)
-
-    content
-    |> String.split("\n")
+    File.stream!(Datascience.Yelp.Reader.business(:path))
     |> Enum.take(@business_limit)
     |> Enum.reject(& is_nil(&1) or &1 == "")
     |> Enum.map(&Jason.decode!/1)
