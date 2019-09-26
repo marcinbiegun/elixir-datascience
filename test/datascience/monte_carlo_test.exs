@@ -41,4 +41,12 @@ defmodule Datascience.MonteCarloTest do
       # IO.puts result
     end
   end
+
+  describe "roll_from_weights/1" do
+    test "returns weighted random" do
+      weights = [5]
+      random_index = MonteCarlo.roll_from_weights(weights)
+      assert random_index == 0
+    end
+  end
 end
