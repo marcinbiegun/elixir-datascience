@@ -23,7 +23,7 @@ defmodule Datascience.YelpMonteCarlo.Simple do
 
   # list of {business_id, "Review text."}
   def read_review do
-    File.stream!(Datascience.Yelp.Reader.review(:path))
+    File.stream!(Datascience.Yelp.path(:review))
     |> Enum.take(@review_limit)
     |> Enum.reject(& is_nil(&1) or &1 == "")
     |> Enum.map(&Jason.decode!/1)
@@ -36,7 +36,7 @@ defmodule Datascience.YelpMonteCarlo.Simple do
 
   # %{bisuness_id => %MapSet{"cat1", cat2"}}
   def read_business_category do
-    File.stream!(Datascience.Yelp.Reader.business(:path))
+    File.stream!(Datascience.Yelp.path(:business))
     |> Enum.take(@business_limit)
     |> Enum.reject(& is_nil(&1) or &1 == "")
     |> Enum.map(&Jason.decode!/1)
@@ -58,7 +58,7 @@ defmodule Datascience.YelpMonteCarlo.Simple do
 
   # list of {business_id, ["category1", "category2"]}
   def read_business do
-    File.stream!(Datascience.Yelp.Reader.business(:path))
+    File.stream!(Datascience.Yelp.path(:business))
     |> Enum.take(@business_limit)
     |> Enum.reject(& is_nil(&1) or &1 == "")
     |> Enum.map(&Jason.decode!/1)

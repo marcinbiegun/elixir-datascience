@@ -59,7 +59,7 @@ defmodule Datascience.MonteCarlo do
 
   # ------------ end genration
 
-  def add_text(data \\ %{}, text) do
+  def text_to_pairs(text) do
     text = String.downcase(text)
     text = Regex.replace(~r/[^a-z ]/m, text, "")
 
@@ -69,13 +69,17 @@ defmodule Datascience.MonteCarlo do
 
     if length(pairs) > 0 do
       pairs = [[:start, pairs |> Enum.at(0) |> Enum.at(0)]] ++ pairs
-      pairs = pairs ++ [[pairs |> Enum.at(-1) |> Enum.at(1), :end]]
-      Enum.reduce(pairs, data, fn [word0, word1], acc_data ->
-        add_pair(acc_data, word0, word1)
-      end)
+      pairs ++ [[pairs |> Enum.at(-1) |> Enum.at(1), :end]]
     else
-      data
+      []
     end
+  end
+
+  def add_text(data \\ %{}, text) do
+   text_to_pairs(text)
+   |> Enum.reduce(data, fn [word0, word1], acc_data ->
+      add_pair(acc_data, word0, word1)
+    end)
   end
 
   def add_pair(data, word, next) do
