@@ -68,8 +68,8 @@ defmodule Datascience.MonteCarlo do
     |> Enum.chunk_every(2, 1, :discard)
 
     if length(pairs) > 0 do
-      pairs = [[:start, pairs |> Enum.at(0) |> Enum.at(0)]] ++ pairs
-      pairs ++ [[pairs |> Enum.at(-1) |> Enum.at(1), :end]]
+      pairs = [[:start, pairs |> Enum.at(0) |> Enum.at(0)]] ++ pairs # add :start
+      pairs ++ [[pairs |> Enum.at(-1) |> Enum.at(1), :end]] # add :end
     else
       []
     end
